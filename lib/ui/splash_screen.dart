@@ -22,23 +22,27 @@ class _SplashScreenState extends State<SplashScreen> {
         builder: (context, snapshot) {
           return Scaffold(
             body: Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
                     width: 200,
                     height: 200,
-                    child: Lottie.asset('assets/animate-loading.json')),
-                SizedBox(
-                  height: 80,
-                  child: Text("Restaurant App",
+                    child: Lottie.asset('assets/animate-loading.json'),
+                  ),
+                  SizedBox(
+                    height: 80,
+                    child: Text(
+                      "Restaurant App",
                       style: GoogleFonts.notoSans(
                           fontSize: 30,
                           color: ColorConstant.kBlackColor,
-                          fontWeight: FontWeight.w600)),
-                )
-              ],
-            )),
+                          fontWeight: FontWeight.w600),
+                    ),
+                  )
+                ],
+              ),
+            ),
           );
         },
       ),

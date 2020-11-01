@@ -12,7 +12,7 @@ class MenuWidget extends StatelessWidget {
       @required this.iconImg,
       @required this.iconColor,
       this.conBackColor,
-      this.onBtnTap})
+      @required this.onBtnTap})
       : super(key: key);
 
   @override

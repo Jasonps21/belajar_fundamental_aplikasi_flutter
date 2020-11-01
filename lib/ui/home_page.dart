@@ -5,11 +5,27 @@ import 'package:restauran_app/common/color_constants.dart';
 import 'package:restauran_app/custom_widgets/filter_widget.dart';
 import 'package:restauran_app/custom_widgets/menu_widget.dart';
 import 'package:restauran_app/custom_widgets/restaurant_widget.dart';
-import 'package:restauran_app/data/model/restauran.dart';
+import 'package:restauran_app/data/api/api_service.dart';
+import 'package:restauran_app/data/model/list_restauran.dart';
+import 'package:restauran_app/ui/search_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static const routeName = '/home-page';
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final filterArrays = ['Breakfast', 'Dessert', 'Lunch', 'Cake'];
+
+  Future<RestaurantResult> _restaurant;
+
+  @override
+  void initState() {
+    _restaurant = ApiService().getListRestaurant();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +73,10 @@ class HomePage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         MenuWidget(
-            iconImg: Icons.subject, iconColor: ColorConstant.kBlackColor),
+          iconImg: Icons.subject,
+          iconColor: ColorConstant.kBlackColor,
+          onBtnTap: () {},
+        ),
         Text(
           "Restaurant",
           style: GoogleFonts.notoSans(
@@ -65,32 +84,46 @@ class HomePage extends StatelessWidget {
               color: ColorConstant.kBlackColor,
               fontWeight: FontWeight.w600),
         ),
-        MenuWidget(iconImg: Icons.repeat, iconColor: ColorConstant.kBlackColor),
+        MenuWidget(
+          iconImg: Icons.search,
+          iconColor: ColorConstant.kBlackColor,
+          onBtnTap: () {
+            Navigator.pushNamed(context, SearchPage.routeName);
+          },
+        ),
       ],
     );
   }
 
   Widget _buildList(BuildContext context) {
-    return FutureBuilder<String>(
-      future: DefaultAssetBundle.of(context)
-          .loadString('assets/local_restaurant.json'),
-      builder: (context, snapshot) {
-        final List<Restaurant> restaurant = parceRestaurant(snapshot.data);
-        return restaurant.length != 0
-            ? ListView.builder(
-                itemBuilder: (context, index) {
-                  return RestaurantWidget(
-                    restaurant: restaurant[index],
-                  );
-                },
-                itemCount: restaurant.length)
-            : Center(
-                child: Text("Data Not Found",
-                    style: GoogleFonts.notoSans(
-                      fontSize: 14,
-                      color: ColorConstant.kBlackColor,
-                      fontWeight: FontWeight.bold,
-                    )));
+    return FutureBuilder(
+      future: _restaurant,
+      builder: (context, AsyncSnapshot<RestaurantResult> snapshot) {
+        var state = snapshot.connectionState;
+        if (state != ConnectionState.done) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data.restaurants.length,
+              itemBuilder: (context, index) {
+                var restaurant = snapshot.data.restaurants[index];
+                return RestaurantWidget(
+                  restaurant: restaurant,
+                );
+              },
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(snapshot.error.toString()),
+            );
+          } else {
+            return Text("");
+          }
+        }
       },
     );
   }

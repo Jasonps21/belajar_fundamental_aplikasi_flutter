@@ -149,23 +149,25 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 35.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildMenu(),
-            SizedBox(
-              height: 20,
-            ),
-            _buildFilter(),
-            SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: _buildList(context),
-            )
-          ],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildMenu(),
+              SizedBox(
+                height: 20,
+              ),
+              _buildFilter(),
+              SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                child: _buildList(context),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -2,6 +2,12 @@
 
 Sebuah aplikasi Restoran sebagai syarat untuk lulus kelas [Belajar Fundamental Aplikasi Flutter](https://www.dicoding.com/academies/195) dari kelas Dicoding.
 
+## Screenshot
+
+## Sertifikat
+telah lulus dari kelas Belajar Fundamental Aplikasi Flutter dengan sertifikat pada link dibawah ini
+[Link Sertifikat](https://www.dicoding.com/certificates/EYX4R6QWJXDL)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

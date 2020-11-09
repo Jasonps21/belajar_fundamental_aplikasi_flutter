@@ -5,16 +5,16 @@ import 'package:restauran_app/data/model/detail_restaurant.dart';
 import 'package:restauran_app/data/model/search_restaurant.dart';
 
 class ApiService {
-  static final String _baseUrl = 'https://restaurant-api.dicoding.dev/';
+  static final String baseUrl = 'https://restaurant-api.dicoding.dev/';
   static final String baseUrlImage =
       'https://restaurant-api.dicoding.dev/images/small/';
-  static final String _list = 'list';
+  static final String list = 'list';
   static final String _detail = 'detail/';
-  static final String _search = 'search/';
+  static final String search = 'search/';
   static final String _review = 'review';
 
   Future<RestaurantResult> getListRestaurant() async {
-    final response = await http.get(_baseUrl + _list);
+    final response = await http.get(baseUrl + list);
     if (response.statusCode == 200) {
       return RestaurantResult.fromJson(json.decode(response.body));
     } else {
@@ -23,7 +23,7 @@ class ApiService {
   }
 
   Future<RestaurantDetail> getDetailRestaurant(String id) async {
-    final response = await http.get(_baseUrl + _detail + id);
+    final response = await http.get(baseUrl + _detail + id);
     if (response.statusCode == 200) {
       return RestaurantDetail.fromJson(json.decode(response.body));
     } else {
@@ -32,7 +32,7 @@ class ApiService {
   }
 
   Future<RestaurantSearch> getSearchRestaurant(String text) async {
-    final response = await http.get(_baseUrl + "$_search?q=$text");
+    final response = await http.get(baseUrl + "$search?q=$text");
     if (response.statusCode == 200) {
       return RestaurantSearch.fromJson(json.decode(response.body));
     } else {
@@ -42,7 +42,7 @@ class ApiService {
 
   Future<bool> postReview(ConsumerReviewPost data) async {
     final response = await http.post(
-      _baseUrl + _review,
+      baseUrl + _review,
       headers: <String, String>{
         'Content-Type': 'application/json',
         'X-Auth-Token': '12345',

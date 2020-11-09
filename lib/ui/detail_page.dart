@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:restauran_app/common/color_constants.dart';
 import 'package:restauran_app/custom_widgets/cardmenu_widget.dart';
 import 'package:restauran_app/custom_widgets/filter_widget.dart';
@@ -13,6 +14,7 @@ import 'package:restauran_app/data/api/api_service.dart';
 import 'package:restauran_app/data/model/detail_restaurant.dart';
 import 'package:restauran_app/data/model/list_restauran.dart'
     as restaurant_list;
+import 'package:restauran_app/provider/database_provider.dart';
 
 class DetailPage extends StatefulWidget {
   static const routeName = '/detail-page';
@@ -65,7 +67,7 @@ class _DetailPageState extends State<DetailPage> {
           child: Column(
             children: [
               _buildHero(widget.restaurant, screenWidth, context),
-              buildDetail(screenWidth, context),
+              _buildDetail(screenWidth, context),
             ],
           ),
         ),
@@ -73,7 +75,7 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Widget buildDetail(double screenWidth, BuildContext context) {
+  Widget _buildDetail(double screenWidth, BuildContext context) {
     return FutureBuilder(
       future: _detailRestaurant,
       builder: (context, AsyncSnapshot<RestaurantDetail> snapshot) {
@@ -374,11 +376,30 @@ class _DetailPageState extends State<DetailPage> {
                       Navigator.pop(context);
                     },
                   ),
-                  MenuWidget(
-                    iconImg: Icons.favorite_border,
-                    iconColor: ColorConstant.kWhiteColor,
-                    conBackColor: Colors.transparent,
-                    onBtnTap: () {},
+                  Consumer<DatabaseProvider>(
+                    builder: (context, provider, child) {
+                      return FutureBuilder<bool>(
+                        future: provider.isFavorite(restaurant.id),
+                        builder: (context, snapshot) {
+                          var isFavorite = snapshot.data ?? false;
+                          return isFavorite
+                              ? MenuWidget(
+                                  iconImg: Icons.favorite,
+                                  iconColor: ColorConstant.kWhiteColor,
+                                  conBackColor: Colors.transparent,
+                                  onBtnTap: () => provider
+                                      .removeFavorite(widget.restaurant.id),
+                                )
+                              : MenuWidget(
+                                  iconImg: Icons.favorite_border,
+                                  iconColor: ColorConstant.kWhiteColor,
+                                  conBackColor: Colors.transparent,
+                                  onBtnTap: () =>
+                                      provider.addFavorite(widget.restaurant),
+                                );
+                        },
+                      );
+                    },
                   ),
                 ],
               ),

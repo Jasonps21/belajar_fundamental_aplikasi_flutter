@@ -11,20 +11,25 @@ class FilterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(40),
+      ),
       child: Container(
         height: 45,
         decoration: BoxDecoration(
-            color: ColorConstant.kFilterBackColor,
-            borderRadius: BorderRadius.circular(40.0)),
+          color: ColorConstant.kFilterBackColor,
+          borderRadius: BorderRadius.circular(40.0),
+        ),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-            child: Text(filterTxt,
-                style: GoogleFonts.notoSans(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: ColorConstant.kBlackColor)),
+            child: Text(
+              filterTxt,
+              style: GoogleFonts.notoSans(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: ColorConstant.kBlackColor),
+            ),
           ),
         ),
       ),

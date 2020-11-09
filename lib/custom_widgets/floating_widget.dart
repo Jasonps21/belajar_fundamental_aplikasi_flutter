@@ -15,40 +15,41 @@ class FloatingWidget extends StatelessWidget {
       height: 55,
       width: 150,
       child: FloatingActionButton(
-          elevation: 5,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(75.0)),
-          heroTag: null,
-          child: Ink(
-            decoration: BoxDecoration(
-                color: ColorConstant.kFABBackColor,
-                borderRadius: BorderRadius.circular(75.0)),
-            child: Container(
-              constraints: BoxConstraints(maxWidth: 300, minHeight: 50.0),
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    icon,
-                    color: ColorConstant.kWhiteColor,
+        elevation: 5,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(75.0)),
+        heroTag: null,
+        child: Ink(
+          decoration: BoxDecoration(
+              color: ColorConstant.kFABBackColor,
+              borderRadius: BorderRadius.circular(75.0)),
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 300, minHeight: 50.0),
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  color: ColorConstant.kWhiteColor,
+                ),
+                SizedBox(
+                  width: 80,
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.notoSans(
+                        color: ColorConstant.kWhiteColor,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600),
                   ),
-                  SizedBox(
-                    width: 80,
-                    child: Text(
-                      text,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.notoSans(
-                          color: ColorConstant.kWhiteColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
           ),
-          onPressed: () {}),
+        ),
+        onPressed: () {},
+      ),
     );
   }
 }

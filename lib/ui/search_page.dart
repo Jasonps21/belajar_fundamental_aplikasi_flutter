@@ -159,7 +159,9 @@ class _SearchPageState extends State<SearchPage> {
                   );
           } else if (snapshot.hasError) {
             return Center(
-              child: Text(snapshot.error.toString()),
+              child: Text(
+                snapshot.error.toString(),
+              ),
             );
           } else {
             return Text("");

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:restauran_app/common/color_constants.dart';
+import 'package:restauran_app/common/navigation.dart';
 import 'package:restauran_app/data/api/api_service.dart';
 import 'package:restauran_app/data/model/list_restauran.dart';
+import 'package:restauran_app/provider/database_provider.dart';
 import 'package:restauran_app/ui/detail_page.dart';
 
 class RestaurantWidget extends StatelessWidget {
@@ -17,50 +20,64 @@ class RestaurantWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, DetailPage.routeName,
-                arguments: restaurant);
-          },
-          child: restaurant.pictureId == null
-              ? Container(
-                  width: 100,
-                  child: Icon(Icons.error),
-                )
-              : Hero(
+        Stack(
+          alignment: AlignmentDirectional.topEnd,
+          children: [
+            GestureDetector(
+              key: Key(restaurant.name + "_page"),
+              onTap: () =>
+                  Navigation.intentWithData(DetailPage.routeName, restaurant),
+              child: Container(
+                child: Hero(
                   tag: restaurant.pictureId,
                   child: Container(
-                    height: 160,
-                    width: screenWidth,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      image: DecorationImage(
-                          image: NetworkImage(
-                              ApiService.baseUrlImage + restaurant.pictureId),
-                          fit: BoxFit.fitWidth),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 15.0),
-                          child: Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: ColorConstant.kWhiteColor,
-                              borderRadius: BorderRadius.circular(18.0),
-                            ),
-                            child: Icon(Icons.favorite_border),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                      height: 160,
+                      width: screenWidth,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                ApiService.baseUrlImage + restaurant.pictureId),
+                            fit: BoxFit.fitWidth),
+                      )),
                 ),
+              ),
+            ),
+            Consumer<DatabaseProvider>(
+              builder: (context, provider, child) {
+                return FutureBuilder<bool>(
+                  future: provider.isFavorite(restaurant.id),
+                  builder: (context, snapshot) {
+                    var isFavorite = snapshot.data ?? false;
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 10.0, top: 10),
+                      child: Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: ColorConstant.kWhiteColor,
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        child: isFavorite
+                            ? IconButton(
+                                icon: Icon(Icons.favorite),
+                                onPressed: () =>
+                                    provider.removeFavorite(restaurant.id),
+                              )
+                            : IconButton(
+                                key: Key(restaurant.name),
+                                icon: Icon(Icons.favorite_border),
+                                onPressed: () => provider.addFavorite(
+                                  restaurant,
+                                ),
+                              ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
         buildNameRestaurant(context, restaurant.name, restaurant.city,
             restaurant.rating.toString()),
